@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const highlights = [
-  "Credentials login for the built-in admin account",
-  "Google OAuth instantly provisions member-facing access",
-  "MySQL-powered CRUD endpoints ready for Vercel",
-  "Tailwind-styled dashboards for admins and members",
+  "Log new sign-ups, freezes, and cancellations without leaving the front desk.",
+  "Give coaches a live roster showing who's active, paused, or overdue.",
+  "Store membership timelines, payment tiers, and renewal dates in one view.",
+  "Let staff welcome members with Google login while admins keep full control.",
 ];
 
 export default function Home() {
