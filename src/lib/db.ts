@@ -9,9 +9,9 @@ const connectionUri = process.env.DATABASE_URL;
 
 const pool =
   global.__mysqlPool ??
-  mysql.createPool(
-    connectionUri ??
-      ({
+  (connectionUri
+    ? mysql.createPool(connectionUri)
+    : mysql.createPool({
         host: process.env.DB_HOST ?? "localhost",
         user: process.env.DB_USER ?? "root",
         password: process.env.DB_PASSWORD ?? "",
@@ -19,8 +19,7 @@ const pool =
         port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
         waitForConnections: true,
         connectionLimit: 10,
-      } as mysql.PoolOptions),
-  );
+      }));
 
 if (process.env.NODE_ENV !== "production") {
   global.__mysqlPool = pool;
