@@ -5,14 +5,15 @@ import { authOptions } from "@/lib/auth";
 import { deleteMember, getMemberById, updateMember } from "@/lib/members";
 import { memberSchema } from "@/lib/validation";
 
-type RouteParams = {
-  params: { id: string };
+type RouteContext = {
+  params: Promise<{ id: string }>;
 };
 
 const notFound = NextResponse.json({ error: "Member not found" }, { status: 404 });
 
-export async function GET(_: Request, { params }: RouteParams) {
-  const id = Number(params.id);
+export async function GET(_: Request, context: RouteContext) {
+  const { id: idParam } = await context.params;
+  const id = Number(idParam);
   if (Number.isNaN(id)) {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
@@ -23,13 +24,14 @@ export async function GET(_: Request, { params }: RouteParams) {
   return NextResponse.json({ member });
 }
 
-export async function PUT(request: Request, { params }: RouteParams) {
+export async function PUT(request: Request, context: RouteContext) {
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const id = Number(params.id);
+  const { id: idParam } = await context.params;
+  const id = Number(idParam);
   if (Number.isNaN(id)) {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
@@ -58,13 +60,14 @@ export async function PUT(request: Request, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(_: Request, { params }: RouteParams) {
+export async function DELETE(_: Request, context: RouteContext) {
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const id = Number(params.id);
+  const { id: idParam } = await context.params;
+  const id = Number(idParam);
   if (Number.isNaN(id)) {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
